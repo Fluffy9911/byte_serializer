@@ -55,7 +55,7 @@ pub fn read(&self)-> u8 {
     pub fn read_slice(&self,start:usize,end:usize) -> Option< &[u8]>{
 
         if end < self.data.len(){
-         return   Some( &self.data[start..end])
+         return   Some( &self.data[start..=end])
         }
 None
     }

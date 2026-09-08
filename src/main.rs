@@ -1,4 +1,4 @@
-use byte_serializer::buffer;
+use byte_serializer::{buffer, schema};
 use byte_serializer::buffer::Buffer;
 
 
@@ -7,18 +7,9 @@ fn main() {
 
 let mut buffer: Buffer = Buffer::new_with_size(8);
 
-    for i in 0..7{
-        buffer.write(buffer::rand_byte());
-        buffer.advance();
-    }
-
-    println!("here: {}",buffer.write_to_string());
-    buffer.iterate_by(4, |x| {
-
-        println!("block");
-        println!("data {:?}",x);
-
-    })
+    schema::write_header_size(&mut buffer, 2);
+let d = &buffer.data()[0..=1];
+    println!("{:?}",schema::read_header_size(&mut buffer));
 
 }
 fn split_u16(value: u16) -> (u8, u8) {
