@@ -5,7 +5,7 @@ use rand::rngs::ThreadRng;
 
 pub struct Buffer {
 
-    data: Vec<u8>,
+    pub(crate) data: Vec<u8>,
 cursor: usize
 }
 
@@ -65,8 +65,16 @@ pub fn read(&self)-> u8 {
         if end < self.data.len(){
          return   Some( &self.data[start..=end])
         }
-None
+None}
+pub fn write_at_u8_arr(&mut self,pos:usize,data:&[u8]){
+
+    for i in 0..data.len() {
+
+        self.data[i + pos] = data[i];
+
     }
+
+}
 
     pub fn data(&self) -> &Vec<u8> {
         &self.data
