@@ -9,8 +9,16 @@ pub struct Buffer {
 cursor: usize
 }
 
-impl Buffer {
 
+impl Buffer {
+    pub  fn write_at_u88(&mut self, p0: usize, p1: [u8; 8]) {
+
+        for i in 0..p1.len(){
+            self.data[i+p0] = p1[i];
+
+        }
+
+    }
     pub fn new()-> Buffer {
     Self::new_with_size(16)
     }
