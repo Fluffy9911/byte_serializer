@@ -1,4 +1,5 @@
 use std::array::TryFromSliceError;
+use crate::schema::Data;
 
 pub fn split_u16(v: u16) -> [u8; 2] {
     v.to_be_bytes()
@@ -30,24 +31,39 @@ pub fn bytes_to_string(bytes: &[u8]) -> String {
 }
 
 pub fn convert_array_u8_64(p0: &[u8]) -> Vec<u64> {
-    if p0.len() %8 != 0 {
-        panic!("Cannot divide the array by 8. got : {}", p0.len());
-    }
-    let mut ret: Vec<u64> = vec![0u64; (p0.len() / 8)  as usize];
+    assert!(
+        p0.len() % 8 == 0,
+        "Cannot convert {} bytes to u64: length is not divisible by 8",
+        p0.len()
+    );
 
-    for i in 0..(p0.len() / 8) {
-
-println!("{:?}",(i*8..(i*8)+8));
-        let u_64 : Result<[u8; 8], TryFromSliceError> = <[u8;8]>::try_from(&p0[i*8..(i*8)+8]);
-
-        if u_64.is_err() {
-            println!("{:?}",u_64.unwrap_err());
-
-        }
-
-        ret[i] = combine_u64(u_64.unwrap());
-
-    }
-ret
-
+    p0.chunks_exact(8)
+        .map(|chunk| {
+            combine_u64(chunk.try_into().unwrap())
+        })
+        .collect()
 }
+
+pub fn put_str(
+    data: &mut Data,
+    id: impl Into<String>,
+    string: impl Into<String>,
+) {
+    data.add_data_unknown(
+        id.into(),
+        &string.into().into_bytes().into_boxed_slice(),
+    );
+}
+
+pub fn read_str(
+    data: &mut Data,
+    id: impl Into<String>,
+) -> String {
+    let id = id.into();
+
+    let bytes = data
+        .get_data_unknown(&id);
+
+    String::from_utf8_lossy(bytes).into_owned()
+}
+

@@ -3,6 +3,7 @@ use std::string::FromUtf8Error;
 use rand::{prelude, Rng, TryRng};
 use rand::rngs::ThreadRng;
 
+
 pub struct Buffer {
 
     pub(crate) data: Vec<u8>,
@@ -123,7 +124,7 @@ pub fn write_and_extend(&mut self,data:&[u8]){
     pub fn iterate_by(&self ,bytes:usize,consumer: impl Fn(&[u8])){
 
         if self.data.len() % bytes != 0{
-println!("size is not a perfect divider of ratio: {},{}",bytes,self.data.len());
+
         }else{
 
             for i in 0..(self.data.len()/ bytes) {
