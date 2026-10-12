@@ -20,6 +20,12 @@ impl Buffer {
         }
 
     }
+    
+    pub fn new_from_data(bytes:&[u8]) -> Self {
+        
+        Buffer {data : Vec::from(bytes), cursor: 0}
+        
+    }
     pub fn new()-> Buffer {
     Self::new_with_size(16)
     }
@@ -41,6 +47,29 @@ impl Buffer {
             self.data[self.cursor] = byte;
 
         }
+
+    }
+    pub fn write_arr(&mut self, data:&[u8],start: usize,size: usize,non: u8){
+let datas = self.data().len();
+        if start + size > datas {
+            self.expand(((start + size) - datas));
+        }
+        for i in 0..size{
+
+            let wa = start + i;
+            if wa > self.data.len(){
+                println!("WARNING: index {} out of bounds!",i);
+            }
+            if i >= data.len(){
+                self.data[wa] = non;
+            }else{
+                self.data[wa] = data[i];
+            }
+
+
+
+        }
+
 
     }
 pub fn read(&self)-> u8 {

@@ -1,9 +1,15 @@
+extern crate core;
+
 pub mod buffer;
 pub mod block;
 pub mod schema;
+pub mod data;
+pub mod serialize;
 
+pub mod stat;
+pub mod data_list;
+pub mod dynamic_data;
 
-#[cfg(feature = "dbg")]
 pub mod debug {
     /// Print a byte slice as individual 8-bit binary values.
     ///

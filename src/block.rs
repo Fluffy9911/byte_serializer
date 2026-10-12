@@ -1,5 +1,5 @@
 use std::array::TryFromSliceError;
-use crate::schema::Data;
+use crate::data::Data;
 
 pub fn split_u16(v: u16) -> [u8; 2] {
     v.to_be_bytes()
@@ -56,7 +56,7 @@ pub fn put_str(
 }
 
 pub fn read_str(
-    data: &mut Data,
+    data: Data,
     id: impl Into<String>,
 ) -> String {
     let id = id.into();
@@ -67,3 +67,6 @@ pub fn read_str(
     String::from_utf8_lossy(bytes).into_owned()
 }
 
+pub(crate) fn read_num_64(p0: &[u8]) -> u64 {
+   u64::from_be_bytes(p0.try_into().unwrap())
+}
